@@ -21,10 +21,6 @@ ROOT_DIR = environ.Path(__file__) - 2
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'es=oavenei96ucfb&@slz3f&z$#94l9(#tuo)!a9ypx-ygkc85'
-
-
 env = environ.Env()
 READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
 if READ_DOT_ENV_FILE:
@@ -32,9 +28,12 @@ if READ_DOT_ENV_FILE:
     env.read_env(str(ROOT_DIR.path('.env')))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+
+ALLOWED_HOSTS = ['127.0.0.1', 'api.vinfixer.com']
 
 
 # Application definition
@@ -89,13 +88,10 @@ AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    "default": env.db("DATABASE_URL")
 }
+DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 
 # Password validation
