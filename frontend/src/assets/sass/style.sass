@@ -1,0 +1,356 @@
+@import './_config.sass'
+
+
+.color_background
+  background: $background-blue
+  min-height: 100vh
+  height: 100%
+  width: 40%
+  position: fixed
+  right: 0
+  top: 0
+  z-index: -1
+
+
+.section
+  padding: 20px $padding
+  &__title
+    margin-bottom: 30px
+    font-size: 42px
+    font-weight: bold
+
+.section:last-child
+  margin-bottom: 100px
+
+
+.body
+  .menu
+    padding: $padding
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    &__desktop
+      display: none
+    
+    &__mobile
+      .img
+        img
+          width: 30px
+
+      &__abstract
+        z-index: 2
+        background: black
+        display: flex
+        align-items: center
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        min-height: 100vh
+        justify-content: center
+
+        ul, li, a
+          list-style: none
+          text-decoration: none
+        
+        li
+          font-size: 24px
+          margin-bottom: 60px
+          text-align: center
+
+          a
+            color: white
+            transition: 0.3s
+          a:hover
+            color: $hint
+
+        .abstract_img
+          top: 50px
+          right: 50px
+          position: absolute
+
+          img
+            width: 44px
+
+
+
+    .logo
+      .img
+        .logo_title
+          font-size: 32px
+          font-weight: 900
+
+  .topcontent
+    padding-top: 70px
+
+    &__text
+      text-align: center
+      .text_title
+        font-size: 36px
+        margin-bottom: 35px
+
+      .text_description
+        .desc
+          color: $description
+          font-size: 18px
+          margin-bottom: 40px
+
+        .results
+          display: flex
+          justify-content: center
+          align-items: center
+          margin-bottom: 35px
+          .results_obj
+            display: flex
+            .obj_number
+              font-size: 30px
+              margin-right: 15px
+              font-weight: 100
+            .obj_desc
+              color: $hint
+              display: flex
+              align-items: center
+
+      .vin_input
+        margin-bottom: 35px
+
+      .first_car_sale
+        display: flex
+        font-weight: bold
+
+
+
+    &__imgs
+      position: relative
+      height: 300px
+
+      img
+        position: absolute
+        left: 0
+        right: 0
+        margin-left: auto
+        margin-right: auto
+        top: 0
+        left: 0
+        margin: 0 auto
+        width: 100%
+        max-width: 350px
+
+
+  .livestories
+    .section__title
+      margin-bottom: 25px
+
+    &__box
+      border: 1px solid $line
+      padding: 20px
+      background: #f8fafc
+
+      .live_users
+        &__detail
+          .avatar
+            width: 60px
+            
+          .user_short_block
+            padding: 15px
+            display: flex
+            align-items: center
+            background: #FFFFFF
+            box-shadow: inset 0px 0px 4px rgba(141, 141, 141, 0.25)
+            margin-bottom: 15px
+            border: 1px solid $line
+            cursor: pointer
+
+            .username
+              font-weight: bold
+              margin-bottom: 5px
+            .description
+              color: $hint
+        
+        .user_data
+          margin: 30px 0
+
+          .data_title
+            font-size: 18px
+            margin-bottom: 10px
+            font-weight: bold
+
+          .data_text
+            margin-top: 5px
+            color: $description
+
+
+
+.account_board
+  display: flex
+  align-items: center
+  height: 100vh
+  width: 100%
+  justify-content: center
+
+  &_form
+    width: 90%
+    
+    .uptitle
+      font-size: 14px
+      text-transform: uppercase
+      color: $hint
+      margin-bottom: 5px
+      font-weight: bold
+
+    .title
+      font-size: 46px
+      font-weight: 900
+      margin-bottom: 10px
+      color: $text
+    
+    .url_board
+      margin-bottom: 15px
+      color: $description
+
+      a
+        font-weight: bold
+    
+    button
+      width: 100%
+    
+
+
+// @media (min-width: 640px)
+
+
+
+@media (min-width: 1200px)
+  $contentWidth: 1400px
+  $padding: calc((100% - #{$contentWidth}) / 2)
+
+  .color_background
+    width: 25%
+
+  .section
+    padding: 30px $padding
+
+    &__title
+      font-size: 50px
+
+  .body
+    .menu
+      padding: 20px $padding
+    
+      &__desktop
+        display: flex
+        justify-content: space-between
+        align-items: center
+        width: 80%
+
+        .right
+          width: 25%
+          display: flex
+          justify-content: space-between
+          align-items: center
+
+        a
+          font-weight: bold
+          text-decoration: none
+          font-size: 18px
+        .button
+          color: white
+          padding: 15px 25px
+          background: $text
+          border-radius: 3px
+
+      &__mobile
+        display: none
+
+  
+    .topcontent
+      display: flex
+      align-items: center
+      margin-bottom: 100px
+
+      &__text
+        width: 50%
+        text-align: left
+
+        .text_description
+
+          .results
+            justify-content: flex-start
+      
+      &__imgs
+        
+        img
+          position: relative
+          max-width: none
+    
+    .livestories
+      &__box
+        display: flex
+        justify-content: space-between
+        .live_users
+          width: 40%
+          margin-right: 25px
+          &__detail
+            .user_data
+              display: none
+
+        .live_content
+          width: 55%
+          &__title
+            font-size: 24px
+            font-weight: bold
+            margin: 10px 0
+
+          &__desc
+            font-size: 18px
+            color: $text
+            margin-top: 15px
+            line-height: 1.5
+            
+          
+      
+
+
+// inputs
+.definput
+  width: 100%
+  position: relative
+  margin-bottom: 20px
+  
+  &__name
+    margin-bottom: 10px
+    font-weight: bold
+  
+  &__textinput
+    width: 100%
+    border: 1px solid $description
+    border-radius: 3px
+    background: white
+
+    input
+      border: none
+      outline: none
+      padding: 10px 15px
+      width: -webkit-fill-available
+
+// default buttons
+.btn
+  border: 2px solid $text
+  padding: 15px 35px
+  background: white
+  font-weight: bold
+  transition: 0.3s
+  cursor: pointer
+
+.btn:hover
+  background: $text
+  color: white
+
+
+// base img
+.img
+  width: 24px
+  margin-right: 10px
+  img
+    width: 100%
