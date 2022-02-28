@@ -1,3 +1,4 @@
+from django.views import View
 from rest_framework import authentication, permissions, serializers, status
 from rest_framework.decorators import action, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +9,7 @@ from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 from users.models import User
 from carfax.service import APIRequest
 
-from .serializers import NewUserSerializer, UserSerializer
+from .serializers import NewUserSerializer, UserSerializer, UserEmailSerializer, RequestSerializer
 
 
 class UsersViewSet(ViewSet):
@@ -74,3 +75,21 @@ class CarfaxViewSet(ViewSet):
 		request = APIRequest(request.data)
 		result = request.get_preview_result()
 		return Response(result)
+
+
+class UserEmailViewSet(ViewSet):
+	def create(self, request):
+		serializer = UserEmailSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RequestViewSet(ViewSet):
+	def create(self, request):
+		serializer = RequestSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(200)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

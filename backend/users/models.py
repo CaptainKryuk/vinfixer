@@ -1,3 +1,4 @@
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -10,3 +11,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email + ' ' + self.username
+
+class UserEmail(models.Model):
+    """Collect emails"""
+    email = models.CharField("User email", max_length=100)
+
+    def __str__(self) -> str:
+        return self.email

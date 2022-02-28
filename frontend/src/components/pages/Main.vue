@@ -4,46 +4,7 @@
 
 <div class="body">
 
-  <!-- * menu -->
-  <div class="menu">
-    <div class="logo">
-      <div class="img">
-        <span class="logo_title">Brand.</span>
-      </div>
-    </div>
-
-    <!-- mobile menu -->
-    <div class="menu__mobile">
-      <div class="img">
-        <img src="@/assets/img/icons/burger_menu.svg" @click="show_menu=true" />
-      </div>
-    </div>
-
-    <transition name="fade">
-      <div class="menu__mobile__abstract" v-if="show_menu">
-        <div class="shadow_bg"></div>
-
-        <div class="abstract_img">
-          <img src="@/assets/img/icons/close.svg" @click="show_menu=false" />
-        </div>
-
-        <div class="menu_modal">
-          <ul>
-            <li v-for="(link, index) in links" :key="index">
-              <router-link :to="link.url">{{ link.name.toUpperCase() }}</router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </transition>
-
-    <!-- desktop menu -->
-    <div class="menu__desktop">
-      <div class="left">
-        <router-link to="/contacts">Contacts</router-link>
-      </div>
-    </div>
-  </div>
+  <custom-menu></custom-menu>
 
   <!-- top content -->
   <div class="section topcontent">
@@ -59,19 +20,27 @@
 
         <div class="results">
           <div class="results_obj" style="margin-right: 20px">
-            <span class="obj_number">10</span>
-            <span class="obj_desc">Years of expierence</span>
+            <span class="obj_number">>25,000</span>
+            <span class="obj_desc">Satisfied users</span>
           </div>
 
           <div class="results_obj">
-            <span class="obj_number">>2000</span>
-            <span class="obj_desc">Satisfied users</span>
+            <span class="obj_number">>500,000</span>
+            <span class="obj_desc">Reports sent</span>
           </div>
         </div>
       </div>
 
       <div>
-        <button class="btn" type="submit" @click="showModal()">Get report</button>
+        <form @submit.prevent="showModal">
+          <text-input v-model="report.vin" 
+                      field_name="Enter your vin number" 
+                      placeholder="report@vinfixer.ru"
+                      style="width: 70%"></text-input>
+
+          <button class="btn" type="submit">Get report</button>
+        </form>
+
       </div>
     </div>
 
@@ -86,7 +55,7 @@
   <!-- live stories -->
   <div class="section livestories">
     <div class="section__title">
-      <h2>Live stories from our users</h2>
+      <h2>What our users have to say about vinfixer.com</h2>
     </div>
 
     <div class="livestories__box">
@@ -119,7 +88,7 @@
       </div>
 
       <!-- show on desktop -->
-      <div class="live_content">
+      <div class="live_content desktop">
         <p class="live_content__title">{{ selected_data.title }}</p>
         <span v-for="(_, index) in new Array(5)" :key="index">
           <img src="@/assets/img/icons/star.svg" />
@@ -129,6 +98,32 @@
     </div>
   </div>
 
+  <div class="section contact">
+    <div class="contact__content">
+      <div class="contact__content__icon">
+        <div class="img">
+          <img src="@/assets/img/icons/mail-approve--gray.svg " />
+        </div>
+      </div>
+
+      <div class="contact__content__text">
+        <p>Join the newsletter and read the new posts first</p>
+      </div>
+
+      <div class="contact__content__input">
+        <form @submit.prevent="sendEmailForm()">
+          <div class="content_input">
+            <input v-model="contact_email" placeholder="Your e-mail" type="email" required />
+            <button type="submit">Send</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <custom-footer></custom-footer>
+
 
   <modal-window :show="show_modal" @close="closeModal()">
     <h2>Get your car report</h2>
@@ -137,7 +132,7 @@
                     field_name="Enter your vin"
                     placeholder="4Y1SL65848Z411439"
                     :required="true"
-                    :disabled="status === 'ready'"></text-input>
+                    :disabled="true"></text-input>
         
         <text-input v-model="report.email"
                     field_name="Enter your email"
@@ -196,6 +191,7 @@
 
       <paypal v-if="status === 'ready'" @approve="createOrder()"></paypal>
   </modal-window>
+
 </div>
 
 <report :show="show_report_modal" :data="html_result" v-if="show_report_modal" @close="show_report_modal = false"></report>
@@ -203,36 +199,33 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import Paypal from '@/components/global/Paypal.vue'
 import Report from '@/components/global/Report.vue'
+import Footer from './components/Footer.vue'
+import CustomMenu from './components/Menu.vue'
 
 export default {
   components: {
     'paypal': Paypal,
-    'report': Report
+    'report': Report,
+    'custom-footer': Footer,
+    'custom-menu': CustomMenu
   },
 
   data() {
     return {
-      links: [
-        {name: 'Contacts', url: '/contacts'},
-        {name: 'Sign in', url: '/login'},
-        {name: 'Sign up', url: '/register'}
-      ],
-
       status: 'not_checked',
 
       users: [
         {id: 1, img: 'user1', name: 'Jacob Muscle Car Collector', position: 'Sales Manager, Slack', data: {title: 'It was a great expierence', description: 'This service has saved me from getting ripped off on Craigslist when I went to buy a BMW but turned out there was a whole boquet of problems that was never mentioned by the seller'}},
-        {id: 2, img: 'user2', name: 'Johny Reeves', position: 'Head of sales, Asana', data: {title: 'It was a great expierence', description: ' Im a Car collector and I use this service to run a cheap report it saves me money and I get instant results it has saved me from so many headaches I like to see a vehicles past history and where its been and what has been done to it thanks to these guys its all possible. -Jacob Muscle Car Collector'}},
-        {id: 3, img: 'user3', name: 'Johny Scranton', position: 'Regional Manager, Dunder Mifflin', data: {title: 'It was a great expierence', description: 'Being a regular car buyer I need to make sure I get exactly what im buying with the market being a little shaky and trusting a stranger on a classified site is a lot harder nowadays and this service takes that stress off my back and takes care of that problem I get more history of the car and not getting myself into a can of works is a key to a successful car buying process thanks again'}},
+        {id: 2, img: 'user2', name: 'Johny Reeves', position: 'Head of sales, Asana', data: {title: 'Very helpfull', description: ' Im a Car collector and I use this service to run a cheap report it saves me money and I get instant results it has saved me from so many headaches I like to see a vehicles past history and where its been and what has been done to it thanks to these guys its all possible. -Jacob Muscle Car Collector'}},
+        {id: 3, img: 'user3', name: 'Johny Scranton', position: 'Regional Manager, Dunder Mifflin', data: {title: 'Great work', description: 'Being a regular car buyer I need to make sure I get exactly what im buying with the market being a little shaky and trusting a stranger on a classified site is a lot harder nowadays and this service takes that stress off my back and takes care of that problem I get more history of the car and not getting myself into a can of works is a key to a successful car buying process thanks again'}},
       ],
 
       selected_user: 1,
       result: [],
       error_text: '',
-
 
       report: {
         vin: '',
@@ -249,6 +242,8 @@ export default {
       html_result: '',
 
       show_report_modal: false,
+
+      contact_email: ''
     }
   },
 
@@ -266,6 +261,26 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['SUCCESS_TOAST', 'DANGER_TOAST']),
+
+    scrollToTop() {
+      window.scrollTo(0, 0)
+    },
+
+    sendEmailForm() {
+      this.$axios.post(`${this.server}email/`,
+        {email: this.contact_email})
+        .then((response) => {
+          this.SUCCESS_TOAST('Subscribe has been activated')
+          this.contact_email = ''
+          this.scrollToTop()
+        })
+        .catch((error) => {
+          this.DANGER_TOAST('Please enter correct email')
+        })
+    },
+
+
     completeForm() {
       this.loading = true
       this.error_text = ''
@@ -302,7 +317,12 @@ export default {
     },
 
     showModal() {
-      this.show_modal = true
+      if (this.report.vin.length > 5) {
+        this.show_modal = true
+      } else {
+        this.DANGER_TOAST('Please fill in vin number')
+      }
+
     },
 
     closeModal() {

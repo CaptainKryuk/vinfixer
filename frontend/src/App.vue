@@ -1,6 +1,20 @@
 <template>
   <router-view/>
+
+  <toast-container></toast-container>
 </template>
+
+<script>
+import ToastContainer from '@/components/global/ToastContainer'
+
+export default {
+  name: 'App',
+
+  components: {
+    'toast-container': ToastContainer
+  }
+}
+</script>
 
 <style lang="sass">
 @mixin font($fname, $fstyle, $fweight, $furl)

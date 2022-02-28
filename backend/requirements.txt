@@ -9,7 +9,6 @@ djangorestframework==3.12.4
 djangorestframework-simplejwt==4.8.0
 idna==3.3
 postmarker==1.0
-psycopg-binary==3.0.8
 psycopg2-binary==2.9.3
 PyJWT==2.1.0
 pytz==2021.1

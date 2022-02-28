@@ -1,6 +1,9 @@
 @import './_config.sass'
 
 
+.desktop
+  display: none
+
 .color_background
   background: $background-blue
   min-height: 100vh
@@ -19,9 +22,6 @@
     font-size: 42px
     font-weight: bold
 
-.section:last-child
-  margin-bottom: 100px
-
 
 .body
   .menu
@@ -29,6 +29,16 @@
     display: flex
     justify-content: space-between
     align-items: center
+
+    .logo
+      cursor: pointer
+      .img
+        width: 120px
+
+        img
+          width: 100%
+          height: 100%
+
 
     &__desktop
       display: none
@@ -139,13 +149,14 @@
 
 
   .livestories
+    margin-bottom: 50px
     .section__title
       margin-bottom: 25px
 
     &__box
       border: 1px solid $line
       padding: 20px
-      background: #f8fafc
+      background: $lightgray-background
 
       .live_users
         &__detail
@@ -181,6 +192,46 @@
             color: $description
 
 
+  .contact
+    &__content
+      padding: 30px
+      background: #f8fafc
+
+      &__icon
+        border-radius: 50%
+        background: $background-blue
+        display: flex
+        align-items: center
+        justify-content: center
+        width: 80px
+        height: 80px
+        margin-bottom: 20px
+        
+        .img
+          margin-right: 0
+
+      &__text
+        font-size: 24px
+        font-weight: bold
+        margin-bottom: 20px
+
+      &__input
+
+        input, button
+          width: 50%
+          padding: 15px 20px
+        
+        input
+          border: 1px solid $line
+          outline: none
+
+        button
+          color: white
+          background: black
+          border: none
+          border: 2px solid black
+          cursor: pointer
+
 
 .account_board
   display: flex
@@ -214,16 +265,74 @@
     
     button
       width: 100%
+
+.footer
+  position: relative
+  margin-bottom: 0
+  .base_mask
+    width: 100%
+    height: 450px
+    position: absolute
+    bottom: 0
+    left: 0
+    z-index: -1
+    object-fit: cover
+  &__content
+    padding-top: 150px
+    &__logo
+      display: flex
+      align-items: center
+      border-bottom: 1px solid $line
+      padding-bottom: 25px
+      img
+        width: 120px
+        margin-right: 50px
+    &__text
+      margin-top: 25px
+        
+
+.contactform
+  margin-bottom: 0
+  &__data
+    margin-bottom: 60px
+    .pretitle, .colored_title, .posttitle
+      margin-bottom: 15px
+      font-weight: bold
+
+    .pretitle, .posttitle
+      font-size: 14px
     
+    .pretitle
+      color: $hint
 
+    .colored_title
+      font-size: 28px
+      background: $background-blue
+      display: inline-block
 
-// @media (min-width: 640px)
+    .contact_icon_box
+      display: flex
+      align-items: center
+      padding: 10px 10px
+      border-radius: 3px
+      border: 1px solid $line
+      margin-bottom: 15px
+      font-weight: bold
+      width: 200px
 
-
+  &__form
+    padding: 20px 30px
+    background: $lightgray-background
 
 @media (min-width: 1200px)
   $contentWidth: 1400px
   $padding: calc((100% - #{$contentWidth}) / 2)
+
+  .desktop
+    display: block
+
+  .mobile
+    display: none
 
   .color_background
     width: 25%
@@ -297,6 +406,7 @@
 
         .live_content
           width: 55%
+        
           &__title
             font-size: 24px
             font-weight: bold
@@ -309,8 +419,31 @@
             line-height: 1.5
             
           
+    .contact
+      &__content
+        display: grid
+        grid-template-columns: 10% 50% 35%
+        align-items: center
+        margin-bottom: 0
       
+        &__text
+          margin-bottom: 0
+      
+        &__icon
+          margin-bottom: 0
+    
+    .footer
+      &__content
+        &__logo
+          img
+            width: 180px
+        &__text
+          padding-bottom: 50px
 
+    .contactform
+      display: grid
+      grid-template-columns: 40% 60%
+      grid-gap: 30px
 
 // inputs
 .definput
@@ -319,7 +452,6 @@
   margin-bottom: 20px
   
   &__name
-    margin-bottom: 10px
     font-weight: bold
   
   &__textinput
@@ -328,11 +460,13 @@
     border-radius: 3px
     background: white
 
-    input
+    input, textarea
       border: none
       outline: none
       padding: 10px 15px
       width: -webkit-fill-available
+
+
 
 // default buttons
 .btn
@@ -342,6 +476,10 @@
   font-weight: bold
   transition: 0.3s
   cursor: pointer
+
+  &.full
+    width: 100%
+    margin-top: 15px
 
 .btn:hover
   background: $text
