@@ -35,7 +35,7 @@
         <form @submit.prevent="showModal">
           <text-input v-model="vin_for_report" 
                       field_name="Enter your vin number" 
-                      placeholder="report@vinfixer.ru"></text-input>
+                      placeholder="WAUDG74F25N111998"></text-input>
 
           <button class="btn" type="submit">Get report</button>
         </form>
