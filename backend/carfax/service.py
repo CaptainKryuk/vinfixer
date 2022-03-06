@@ -12,11 +12,12 @@ class APIRequest:
         self.preview_url = 'https://api.carfax.pro/wp-json/v1/get_report_check/{}'
         self.report_url = 'https://api.carfax.pro/wp-json/v1/get_report_by_wholesaler/{}/{}/{}/{}'
 
-        self.api_key = 'e67ae95b59bd4f637d3ff804da40fe80'
+        self.api_key = settings.CARFAX_KEY
 
         self.carfax_example_vin = 'WAUDG74F25N111998'
         self.vin = data['vin']
-        self.email = data['email']
+        if 'email' in data:
+            self.email = data['email']
 
     def get_report(self,):
         r = requests.get(self.report_url.format(self.vin, self.api_key, 'carfax', 'en'))

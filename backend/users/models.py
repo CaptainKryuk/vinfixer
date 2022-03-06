@@ -16,5 +16,10 @@ class UserEmail(models.Model):
     """Collect emails"""
     email = models.CharField("User email", max_length=100)
 
+    status = models.CharField("User status", 
+                              max_length=50, 
+                              choices=(('subscribe', 'subscribe'), ('report', 'report')),
+                              default='report')
+
     def __str__(self) -> str:
         return self.email

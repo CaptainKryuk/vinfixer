@@ -10,7 +10,7 @@
   <div class="section topcontent">
     <div class="topcontent__text">
       <div class="text_title">
-        <h1>Buying a Used Car? Dont find surprses down the road. Run a Report and see what the seller isnt telling you.</h1>
+        <h1>Buying a Used Car? Don't find surprises down the road. Run a Report and see what the seller isn't telling you.</h1>
       </div>
 
       <div class="text_description">
@@ -31,12 +31,11 @@
         </div>
       </div>
 
-      <div>
+      <div class="title_form">
         <form @submit.prevent="showModal">
-          <text-input v-model="report.vin" 
+          <text-input v-model="vin_for_report" 
                       field_name="Enter your vin number" 
-                      placeholder="report@vinfixer.ru"
-                      style="width: 70%"></text-input>
+                      placeholder="report@vinfixer.ru"></text-input>
 
           <button class="btn" type="submit">Get report</button>
         </form>
@@ -124,73 +123,11 @@
 
   <custom-footer></custom-footer>
 
-
-  <modal-window :show="show_modal" @close="closeModal()">
-    <h2>Get your car report</h2>
-      <form @submit.prevent="completeForm()">
-        <text-input v-model="report.vin"
-                    field_name="Enter your vin"
-                    placeholder="4Y1SL65848Z411439"
-                    :required="true"
-                    :disabled="true"></text-input>
-        
-        <text-input v-model="report.email"
-                    field_name="Enter your email"
-                    placeholder="vin@fixer.com"
-                    type="email"
-                    :required="true"
-                    :disabled="status === 'ready'"></text-input>
-
-        <div class="info_box" v-if="status !== 'not_checked'">
-          <!-- if we have result -->
-          <div class="info_box__success" v-if="status === 'ready'">
-            <h3>
-              The result found 
-              <div class="img">
-                <img src="@/assets/img/icons/check--green.svg" />
-              </div>
-            </h3>
-
-            <div class="result_table">
-              <div v-for="(row, index) in result" :key="index" class="result_table__row">
-                <span>{{ row[0] }}</span>
-                <span>{{ row[1] }}</span>
-              </div>
-            </div>
-
-            <div class="info_box__direct">
-              <h3 style="font-size: 18px; color: green">After success payment we will send full car report on your email</h3>
-            </div>
-          </div>
-
-          <!-- if we didn't receive result -->
-          <div class="info_box_error" v-if="status === 'error'">
-            <h3 style="color: red">Invalid VIN, enter right VIN number</h3>
-          </div>
-        </div>
-
-        <button class="btn" 
-                style="width: 100%; margin-top: 10px" 
-                type="submit" 
-                v-if="status !== 'ready' && !loading">
-          <span>Next</span>
-        </button>
-
-        <button class="btn" 
-                style="width: 100%; margin-top: 10px" 
-                type="button" 
-                v-if="status !== 'ready' && loading">
-          <div class="spinner main"></div>
-        </button>
-      </form>
-
-      <div class="info_box" style="display: flex" v-if="creating_order_loading">
-        <h3>We're creating your order</h3>
-        <div class="spinner"></div>
-      </div>
-
-      <paypal v-if="status === 'ready'" @approve="createOrder()"></paypal>
-  </modal-window>
+  <result-window :show="show_modal" 
+                 @success="showReport" 
+                 @close="closeModal"
+                 :vin="vin_for_report" 
+                 v-if="show_modal"></result-window>
 
 </div>
 
@@ -200,17 +137,17 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import Paypal from '@/components/global/Paypal.vue'
 import Report from '@/components/global/Report.vue'
 import Footer from './components/Footer.vue'
 import CustomMenu from './components/Menu.vue'
+import ResultWindow from './components/ResultWindow.vue'
 
 export default {
   components: {
-    'paypal': Paypal,
     'report': Report,
     'custom-footer': Footer,
-    'custom-menu': CustomMenu
+    'custom-menu': CustomMenu,
+    'result-window': ResultWindow
   },
 
   data() {
@@ -227,15 +164,8 @@ export default {
       result: [],
       error_text: '',
 
-      report: {
-        vin: '',
-        email: '',
-      },
-      loading: false,
-      creating_order_loading: false,
-
-       
-      show_menu: false,
+      vin_for_report: '',
+      
 
       show_modal: false,
 
@@ -267,9 +197,21 @@ export default {
       window.scrollTo(0, 0)
     },
 
+    showReport(result) {
+      this.show_report_modal = true
+      this.html_result = result 
+    },
+
+    closeModal() {
+      this.show_modal = false
+    },
+
     sendEmailForm() {
       this.$axios.post(`${this.server}email/`,
-        {email: this.contact_email})
+        {
+          email: this.contact_email,
+          status: 'subscribe'
+        })
         .then((response) => {
           this.SUCCESS_TOAST('Subscribe has been activated')
           this.contact_email = ''
@@ -281,43 +223,8 @@ export default {
     },
 
 
-    completeForm() {
-      this.loading = true
-      this.error_text = ''
-      this.$axios.post(`${this.server}car/preview/`,
-        this.report)
-        .then((response) => {
-          this.loading = false
-          if (response.data && response.data.length) {
-            let data = JSON.parse(response.data)
-            if (Object.keys(data).length) {
-              this.status = 'ready'
-              for (let i=0; i<Object.keys(data).length; i++) {
-                this.result.push([Object.keys(data)[i], data[Object.keys(data)[i]]])
-              }
-            }
-          }
-          else {
-            this.status = 'error'
-            this.error_text = 'This vin was not found'
-          }
-        })
-    },
-
-    createOrder() {
-      this.creating_order_loading = true
-      this.$axios.post(`${this.server}car/`,
-        this.report)
-        .then((response) => {
-          this.creating_order_loading = false
-          this.show_modal = false
-          this.html_result = response.data
-          this.show_report_modal = true
-        })
-    },
-
     showModal() {
-      if (this.report.vin.length > 5) {
+      if (this.vin_for_report.length > 5) {
         this.show_modal = true
       } else {
         this.DANGER_TOAST('Please fill in vin number')
@@ -325,9 +232,6 @@ export default {
 
     },
 
-    closeModal() {
-      this.show_modal = false
-    },
   }
 }
 </script>
