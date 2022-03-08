@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       product: {
-        price: 5,
+        price: 5.99,
         description: 'Report from carfax' 
       },
       loaded: false,
