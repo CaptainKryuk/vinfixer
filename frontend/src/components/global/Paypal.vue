@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       product: {
-        price: 5.99,
+        price: 0.1,
         description: 'Report from carfax' 
       },
       loaded: false,
@@ -25,8 +25,10 @@ export default {
 
   mounted: function() {
     const script = document.createElement("script");
+    // production
     script.src = "https://www.paypal.com/sdk/js?client-id=AR3RNqHGletoOl7A5HPpdN93yQ2oRYT2BU9FiylF9Nta2LNwiA4tj65tpRfVf9V2CtpCfTslMJ7JVVdo";
-    // script.src = 'https://www.paypal.com/sdk/js?client-id=AZQcpjZ2Oj95KwRwPcOM4wBPnPjynu445VmhCOsSPH-9W7ZbORritMC6JlagNA1JyKHiAQjRs9fIjdeU'
+    // development
+    // script.src = 'https://www.paypal.com/sdk/js?client-id=AedWSgVal6ATBCGzpiUxLQLnTozZqPWEaL3o_iUzl3nP39_hZpUJloXoQqOLF6LdAuoMNTUMmo1kOQHQ'
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
   },
