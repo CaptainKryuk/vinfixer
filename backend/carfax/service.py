@@ -23,10 +23,14 @@ class APIRequest:
         r = requests.get(self.report_url.format(self.vin, self.api_key, 'carfax', 'en'))
         if r.status_code == 200:
             result = json.loads(r.text)
-            code = result['report']['report']
-            decoded_result = base64.b64decode(code)
+            self.code = result['report']['report']
+            decoded_result = base64.b64decode(self.code)
             self.finish = decoded_result.decode('utf-8')
-            if code:
+            
+            import pdfkit
+            pdfkit.from_string(self.finish, 'result.pdf')
+
+            if self.code:
                 self.send_report_on_email()
 
             return self.finish
@@ -47,13 +51,31 @@ class APIRequest:
     
 
     def send_report_on_email(self,):
-        try:
-            postmark_client =PostmarkClient(server_token=settings.POSTMARK_API_KEY)
-            postmark_client.emails.send(
-                From=settings.POSTMARK_SENDER,
-                To=self.email,
-                Subject='Carfax report',
-                HtmlBody=self.finish
-            )
-        except:
-            pass
+        import requests
+        with open('result.pdf', 'rb') as f:
+            content = base64.b64encode(f.read()).decode('utf-8')
+
+        print(type(content))
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Postmark-Server-Token": settings.POSTMARK_API_KEY
+        }
+
+        data = {
+            "From": settings.POSTMARK_SENDER,
+            "To": self.email,
+            "Subject": 'Carfax report',
+            "HtmlBody": 'Here is your report 2',
+            "Attachments": [
+                {
+                    "Name": "report.pdf",
+                    "Content": content,
+                    "ContentType": "application/pdf"
+                }
+            ]
+        }
+        URL = 'https://api.postmarkapp.com/email'
+        r = requests.post(URL, headers=headers, data=json.dumps(data))
+        print(r.status_code, r.text)

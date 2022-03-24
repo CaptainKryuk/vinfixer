@@ -60,14 +60,14 @@ export default {
     background: white
     z-index: 2
     display: flex
-    align-items: center
+    // align-items: center
     justify-content: center
     padding: 35px
     border-radius: 5px
     overflow-y: auto
 
     &.large
-      width: 70%
+      width: 90%
 
     &__content
       width: 100%
