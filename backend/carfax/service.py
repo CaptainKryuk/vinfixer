@@ -28,7 +28,11 @@ class APIRequest:
             self.finish = decoded_result.decode('utf-8')
             
             import pdfkit
-            pdfkit.from_string(self.finish, 'result.pdf')
+            try:
+                pdfkit.from_string(self.finish, 'result.pdf')
+            except Exception as e:
+                print(e)
+
 
             if self.code:
                 self.send_report_on_email()
