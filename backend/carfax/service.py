@@ -82,4 +82,7 @@ class APIRequest:
         }
         URL = 'https://api.postmarkapp.com/email'
         r = requests.post(URL, headers=headers, data=json.dumps(data))
-        print(r.status_code, r.text)
+        
+        import subprocess
+
+        subprocess.call(f'rm -rf {settings.BASE_DIR}/result.pdf', shell=True)
