@@ -71,7 +71,7 @@ class APIRequest:
             "From": settings.POSTMARK_SENDER,
             "To": self.email,
             "Subject": 'Carfax report',
-            "HtmlBody": 'Here is your report 2',
+            "HtmlBody": 'Here is your report',
             "Attachments": [
                 {
                     "Name": "report.pdf",

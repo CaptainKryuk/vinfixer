@@ -175,6 +175,6 @@ SIMPLE_JWT = {
 
 # POSTMARK
 POSTMARK_API_KEY = env('POSTMARK_API_KEY')
-POSTMARK_SENDER = 'report@privacybox.ru'
+POSTMARK_SENDER = 'sales@vinfixer.com'
 
 CARFAX_KEY = env('CARFAX_KEY')
